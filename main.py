@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import intro
-from typing import Any, Tuple
+from typing import Any
 
 CSV_FILE_PATH: str = "data.csv"
 PHOTO_PATH: str = "images/photo.jpg"

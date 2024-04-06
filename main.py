@@ -1,46 +1,56 @@
-import pandas
 import streamlit as st
-import pandas
+import pandas as pd
+import intro
+from typing import Any, Tuple
 
-content = """ Welcome to my portfolio! I'm Sandeep, an experienced business analyst venturing into the exciting world of development. With a rich background in analyzing complex business processes and identifying opportunities for growth, I bring a unique perspective to my journey as a developer.
+CSV_FILE_PATH: str = "data.csv"
+PHOTO_PATH: str = "images/photo.jpg"
+IMAGE_PATH: str = "images/"
+NAME: str = "Sandeep Gajbi"
 
-While my roots lie in business analysis, my passion for technology has led me to delve into Python development. Embracing this new challenge, I'm dedicated to honing my skills and mastering the art of crafting elegant and efficient solutions through code.
 
-Driven by a curiosity to explore new avenues and expand my expertise, I'm committed to continuous learning and pushing the boundaries of what's possible. My transition from business analysis to development represents my adaptability and eagerness to embrace new challenges head-on.
+def read_csv_file(file_path: str, pandas_module: pd) -> pd.DataFrame:
+    """Reads a CSV file using pandas."""
+    try:
+        return pandas_module.read_csv(file_path, sep=";")
+    except FileNotFoundError:
+        st.error(f"File not found: {file_path}")
+        return pd.DataFrame()
 
-Join me on this exciting journey as I showcase my evolving skills and the projects I'm passionate about. From leveraging data to drive strategic decisions to building innovative Python applications, I'm eager to make an impact and create value in both the business and tech realms.
 
-Let's connect and collaborate to bring your ideas to life with creativity, insight, and technical expertise! """
+def display_portfolio_header(streamlit_module: Any) -> None:
+    """Displays the portfolio header."""
+    streamlit_module.set_page_config(layout="wide")
+    col1, col2 = streamlit_module.columns(2)
 
-content_1 = """
-Below you can find some of the apps I have built in Python.
-"""
-st.set_page_config(layout="wide")
-col1, col2 = st.columns(2)
+    with col1:
+        streamlit_module.image(PHOTO_PATH, use_column_width="auto", output_format="auto")
 
-with col1:
-    st.image("images/photo.jpg", use_column_width="auto", output_format="auto")
+    with col2:
+        streamlit_module.title(NAME)
+        streamlit_module.info(intro.CONTENT)
 
-with col2:
-    st.title("Sandeep Gajbi")
-    st.info(content)
 
-st.subheader(content_1)
+def display_app_details(streamlit_module: Any, col: Any, df: pd.DataFrame, start_index: int, end_index: int) -> None:
+    """Displays details of the apps."""
+    with col:
+        for index, row in df[start_index:end_index].iterrows():
+            streamlit_module.header(row["title"])
+            streamlit_module.write(row["description"])
+            streamlit_module.image(IMAGE_PATH + row["image"])
+            streamlit_module.write(f"[Source Code]({row['url']})")
 
-col3, empty_col, col4 = st.columns([1.5, 0.5, 1.5])
 
-df = pandas.read_csv("data.csv", sep=";")
-with col3:
-    for index, row in df[:10].iterrows():
-        st.header(row["title"])
-        st.write(row["description"])
-        st.image("images/" + row["image"])
-        st.write(f"[Source Code]({row['url']})")
+def main() -> None:
+    display_portfolio_header(st)
+    st.subheader("Below you can find some of the apps I have built in Python.")
+    col3, _, col4 = st.columns([1.5, 0.5, 1.5])
 
-with col4:
-    for index, row in df[10:].iterrows():
-        st.header(row["title"])
-        st.write(row["description"])
-        st.image("images/" + row["image"])
-        st.write(f"[Source Code]({row['url']})")
+    df = read_csv_file(CSV_FILE_PATH, pd)
+    if not df.empty:
+        display_app_details(st, col3, df, 0, 10)
+        display_app_details(st, col4, df, 10, len(df))
 
+
+if __name__ == "__main__":
+    main()

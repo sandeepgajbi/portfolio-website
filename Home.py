@@ -21,7 +21,7 @@ def read_csv_file(file_path: str, pandas_module: pd) -> pd.DataFrame:
 def display_portfolio_header(streamlit_module: Any) -> None:
     """Displays the portfolio header."""
     streamlit_module.set_page_config(layout="wide")
-    col1, col2 = streamlit_module.columns(2)
+    col1, col2, _ = streamlit_module.columns([1.5, 1.5, 0.5])
 
     with col1:
         streamlit_module.image(PHOTO_PATH, use_column_width="auto", output_format="auto")
@@ -29,6 +29,7 @@ def display_portfolio_header(streamlit_module: Any) -> None:
     with col2:
         streamlit_module.title(NAME)
         streamlit_module.info(intro.CONTENT)
+        streamlit_module.toast(f"Hello there 👋, Thanks for stopping by!")
 
 
 def display_app_details(streamlit_module: Any, col: Any, df: pd.DataFrame, start_index: int, end_index: int) -> None:

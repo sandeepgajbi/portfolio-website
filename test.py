@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 import pandas as pd
 import streamlit as st
-import main
+import Home
 
 
 class TestMain(unittest.TestCase):
@@ -12,12 +12,12 @@ class TestMain(unittest.TestCase):
     def test_display_portfolio_header(self, mock_info, mock_title, mock_image):
 
         # Call the function
-        main.display_portfolio_header(st)
+        Home.display_portfolio_header(st)
 
         # Assertions
-        mock_image.assert_called_once_with(main.PHOTO_PATH, use_column_width="auto", output_format="auto")
-        mock_title.assert_called_once_with(main.NAME)
-        mock_info.assert_called_once_with(main.intro.CONTENT)
+        mock_image.assert_called_once_with(Home.PHOTO_PATH, use_column_width="auto", output_format="auto")
+        mock_title.assert_called_once_with(Home.NAME)
+        mock_info.assert_called_once_with(Home.intro.CONTENT)
 
     @patch('pandas.read_csv')
     def test_read_csv_file(self, mock_read_csv):
@@ -26,7 +26,7 @@ class TestMain(unittest.TestCase):
                                                    'image': ['app1.png'], 'url': ['http://example.com/app1']})
 
         # Call the function
-        df = main.read_csv_file("test.csv", pd)
+        df = Home.read_csv_file("test.csv", pd)
 
         # Assertions
         self.assertIsInstance(df, pd.DataFrame)
@@ -49,7 +49,7 @@ class TestMain(unittest.TestCase):
         end_index = 1
 
         # Call the function
-        main.display_app_details(st, col_mock, df, start_index, end_index)
+        Home.display_app_details(st, col_mock, df, start_index, end_index)
 
         # Assertions
         mock_image.assert_called_once_with("images/app1.png")

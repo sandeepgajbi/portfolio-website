@@ -1,9 +1,10 @@
 import smtplib
 import ssl
 from email.message import EmailMessage
+import os
 
 USERNAME = "sandeepgajbi@gmail.com"
-PASSWORD = ""  # update key later when you need to run
+PASSWORD = os.getenv("PASSWORD")  # update key later when you need to run
 HOST = "smtp.gmail.com"
 PORT = 465
 
